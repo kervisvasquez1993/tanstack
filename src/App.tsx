@@ -1,7 +1,12 @@
-const App = () => {
+import { Outlet } from 'react-router-dom';
+
+export const GitApp = () => {
   return (
-    <h1 className="text-3xl font-bold underline bg-red-500">Hello world!</h1>
+    <div className="container m-auto max-w-7xl mt-3">
+      <h1>
+        Git Issues <small>Seguimiento de problemas</small>
+      </h1>
+      <Outlet />
+    </div>
   );
 };
-
-export default App;
