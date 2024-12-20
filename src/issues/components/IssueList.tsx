@@ -1,6 +1,11 @@
-import { IssueItem } from './IssueItem';
+import useIssues from "../../hooks/useIssues";
+import { IssuesInterfaces } from "../../interfaces/issues.interfaces";
+import { IssueItem } from "./IssueItem";
 
-export const IssueList = () => {
+interface Props {
+  issues: IssuesInterfaces[];
+}
+export const IssueList = ({ issues }: Props) => {
   return (
     <>
       {/* Botones de All, Open, Closed */}
@@ -11,9 +16,10 @@ export const IssueList = () => {
       </div>
 
       {/* Lista de issues */}
+
       <div className="mt-4">
-        {[1, 2, 3].map((issue) => (
-          <IssueItem key={issue} />
+        {issues.map((issue: IssuesInterfaces) => (
+          <IssueItem key={issue.id}  issue={issue}/>
         ))}
       </div>
     </>
