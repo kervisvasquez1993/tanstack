@@ -1,15 +1,39 @@
 import { FiInfo, FiMessageSquare, FiCheckCircle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { IssuesInterfaces } from "../../interfaces/issues.interfaces";
+import { useQueryClient } from "@tanstack/react-query";
+import { getIssue } from "../../actions/getIssue";
+import { getIssueComment } from "../../actions/getIssueComments";
 
 interface Props {
   issue: IssuesInterfaces;
 }
 export const IssueItem = ({ issue }: Props) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const prefetData = () => {
+     queryClient.prefetchQuery({
+      queryKey: ["issues", issue.number],
+      queryFn: () => getIssue(issue.number),
+      staleTime: 1000 * 60,
+    });
+    queryClient.prefetchQuery({
+       queryKey: ["issues", issue.id, "comment"],
+          queryFn: () => getIssueComment(issue.number),
+          staleTime: 1000 * 60
+    });
+  };
 
+  const presetData = () => {
+    queryClient.setQueryData(['issues', issue.number], issue, {
+      updatedAt: Date.now() + 1000 *60
+    })
+  }
   return (
-    <div className="flex items-center px-2 py-3 mb-5 border rounded-md bg-slate-900 hover:bg-slate-800">
+    <div
+      onMouseEnter={presetData}
+      className="flex items-center px-2 py-3 mb-5 border rounded-md bg-slate-900 hover:bg-slate-800"
+    >
       {issue.state === "open" ? (
         <FiInfo size={30} color="red" className="min-w-10" />
       ) : (

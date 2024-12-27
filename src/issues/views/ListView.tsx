@@ -1,11 +1,15 @@
+import { useState } from "react";
 import useIssues from "../../hooks/useIssues";
 import { IssueList } from "../components/IssueList";
 import { LabelPicker } from "../components/LabelPicker";
+import { State } from "../../interfaces/labes.interfaces";
 
 export const ListView = () => {
-  const { data, isLoading } = useIssues();
+  const [state, setState] = useState<State>(State.All);
+  const { data, isLoading } = useIssues({
+    state,
+  });
 
-  console.log(data);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 mt-5">
       <div className="col-span-1 sm:col-span-2">
@@ -14,7 +18,7 @@ export const ListView = () => {
             loading...
           </div>
         ) : (
-          <IssueList issues={data!} />
+          <IssueList issues={data!} onStateChange={setState} state={state} />
         )}
       </div>
 
